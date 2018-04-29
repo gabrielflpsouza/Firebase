@@ -11,19 +11,17 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings
 
 class App : Application() {
 
+    val firestoreInstance : FirebaseFirestore by lazy {
+        FirebaseFirestore.getInstance().apply {
+            firestoreSettings = FirebaseFirestoreSettings.Builder()
+                    .setPersistenceEnabled(true)
+                    .build()
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
 
-        val settings = FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .build()
-        db.firestoreSettings = settings
     }
-
-    companion object {
-
-        val db = FirebaseFirestore.getInstance()
-    }
-
 
 }

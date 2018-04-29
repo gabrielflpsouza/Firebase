@@ -1,7 +1,10 @@
 package gabriel.app.firebase;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,42 +32,29 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     public static final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    private MainViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         inicializarComponentes();
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
-        db.collection("tbQuestao")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (DocumentSnapshot documentSnapshot : task.getResult()){
-                                Log.d("Foi", documentSnapshot.getId() + " => " + documentSnapshot.getData());
-                                DocumentReference docRef = db.collection("tbQuestao").document(documentSnapshot.getId());
-                                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        tbQuestao city = documentSnapshot.toObject(tbQuestao.class);
-                                        Log.d("Foi2", city.getEnunciado());
-                                    }
-                                });
+        if(savedInstanceState == null) {
+            viewModel.loadQuestions(((App) getApplication()).getFirestoreInstance());
+        }
 
-                            }
-                        } else {
-                            Log.d("Errou", "Error getting documents: " + task.getException());
-                        }
-                    }
-                });
+        viewModel.getResult().observe(this, new Observer<Questão>() {
+            @Override
+            public void onChanged(@Nullable Questão questão) {
+                if(questão != null){
 
-
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .build();
-        db.setFirestoreSettings(settings);
+                    //TODO lidar com o resultado
+                }
+            }
+        });
 
     }
 
