@@ -1,6 +1,6 @@
 package gabriel.app.firebase;
 
-public class tbQuestao {
+public class Questão {
     private String enunciado;
     private String altCerta;
     private String alt1;
@@ -13,9 +13,9 @@ public class tbQuestao {
     private String imagem;
     private String comentario;
 
-    public tbQuestao(){}
+    public Questão(){}
 
-    public tbQuestao(String enunciado, String altCerta, String alt1, String alt2, String alt3, int ano, String universidade, String area, String subarea, String imagem, String comentario) {
+    public Questão(String enunciado, String altCerta, String alt1, String alt2, String alt3, int ano, String universidade, String area, String subarea, String imagem, String comentario) {
         this.enunciado = enunciado;
         this.altCerta = altCerta;
         this.alt1 = alt1;
